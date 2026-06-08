@@ -66,7 +66,7 @@ export default function Hero() {
         </div>
 
         {/* rotating descriptor */}
-        <div style={{ marginTop: '32px', height: '44px', position: 'relative' }}>
+        <div style={{ marginTop: '32px', minHeight: '44px', position: 'relative' }}>
           <AnimatePresence mode="wait">
             <motion.p
               key={idx}
