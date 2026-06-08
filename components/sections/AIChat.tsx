@@ -2,175 +2,184 @@
 
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import CardGlow from '@/components/effects/CardGlow'
-import SectionLabel from '@/components/ui/SectionLabel'
 
-const ease = [0.22, 1, 0.36, 1] as [number, number, number, number]
-
-type Role = 'user' | 'ai'
-
-const messages: { role: Role; content: string }[] = [
-  { role: 'user', content: "What's your strongest technical skill?" },
-  {
-    role: 'ai',
-    content:
-      "Connecting systems that don't want to talk to each other — APIs, ML models, IoT sensors. I think in pipelines.",
-  },
-  { role: 'user', content: 'Are you open to work in Germany?' },
-  { role: 'ai', content: 'Yes. Moving to Cologne this year. Backend or AI engineering roles.' },
+const messages = [
+  { role: 'user', text: "What kind of work are you looking for?" },
+  { role: 'ai', text: "Backend and AI engineering roles in Germany, ideally starting mid-2027 after I graduate. Open to junior roles with real responsibility." },
+  { role: 'user', text: "What are you building right now?" },
+  { role: 'ai', text: "A RAG pipeline for document Q&A and working through the AI Engineering Path repo. Also this portfolio — the chat section you're reading right now." },
+  { role: 'user', text: "German level?" },
+  { role: 'ai', text: "A2 heading toward B1. I can order food and apologize for my German in German, which feels like a start." },
 ]
 
 export default function AIChat() {
-  const ref = useRef<HTMLElement>(null)
+  const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section
-      id="chat"
-      ref={ref}
-      className="border-t"
-      style={{ borderColor: 'var(--border)', padding: '160px 0', zIndex: 2, position: 'relative' }}
-    >
+    <section id="aichat" ref={ref} style={{ position: 'relative', zIndex: 10, padding: '120px 0' }}>
       <div className="max-w-[1200px] mx-auto px-6 md:px-12">
-        <SectionLabel number="04" label="ASK ME" />
-
-        <motion.div
-          className="max-w-[680px]"
-          initial={{ opacity: 0, y: 32 }}
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease }}
+          transition={{ duration: 0.6 }}
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '12px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            color: 'var(--pf-text-muted)',
+            marginBottom: '64px',
+          }}
         >
-          <h2
+          04 — Ask me anything
+        </motion.p>
+
+        <div className="max-w-2xl mx-auto">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.1 }}
             style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '36px',
-              color: 'var(--text-primary)',
+              fontFamily: 'var(--font-sans)',
+              fontSize: 'clamp(28px, 4vw, 40px)',
+              fontWeight: 600,
+              letterSpacing: '-0.02em',
+              color: 'var(--pf-text-primary)',
               marginBottom: '8px',
+              textAlign: 'center',
             }}
           >
             This portfolio talks back.
-          </h2>
-          <p
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
             style={{
-              fontFamily: 'var(--font-body)',
               fontSize: '15px',
-              color: 'var(--text-muted)',
-              marginBottom: '40px',
+              color: 'var(--pf-text-muted)',
+              textAlign: 'center',
+              marginBottom: '32px',
+              fontWeight: 300,
             }}
           >
-            AI assistant coming soon. For now, here&apos;s a preview.
-          </p>
+            AI integration coming soon. Preview below.
+          </motion.p>
 
-          <CardGlow
+          {/* Chat card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.3 }}
             style={{
-              background: 'var(--bg-card)',
-              border: '1px solid var(--border)',
-              borderRadius: '12px',
+              border: '1px solid var(--pf-border)',
+              borderRadius: '16px',
               overflow: 'hidden',
+              background: 'var(--pf-bg-secondary)',
             }}
           >
-            {/* header */}
+            {/* Header */}
             <div
-              className="flex items-center justify-between px-5 py-3 border-b"
-              style={{ borderColor: 'var(--border)', background: 'var(--bg-secondary)' }}
+              style={{
+                padding: '14px 20px',
+                borderBottom: '1px solid var(--pf-border)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
             >
-              <div className="flex items-center gap-2">
-                <motion.span
-                  className="w-2 h-2 rounded-full"
-                  style={{ background: '#22c55e' }}
-                  animate={{ opacity: [1, 0.3, 1] }}
-                  transition={{ duration: 1.8, repeat: Infinity }}
-                />
-                <span
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '13px',
-                    color: 'var(--text-primary)',
-                  }}
-                >
-                  Cem&apos;s AI
-                </span>
-              </div>
+              <motion.span
+                animate={{ opacity: [1, 0.3, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                style={{
+                  width: '8px',
+                  height: '8px',
+                  borderRadius: '50%',
+                  background: '#30d158',
+                  display: 'inline-block',
+                }}
+              />
               <span
                 style={{
                   fontFamily: 'var(--font-mono)',
-                  fontSize: '11px',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.08em',
-                  color: 'var(--text-muted)',
-                  border: '1px solid var(--border)',
-                  padding: '2px 8px',
-                  borderRadius: '4px',
+                  fontSize: '12px',
+                  color: 'var(--pf-text-muted)',
                 }}
               >
-                Coming soon
+                cem-ai · claude-powered
               </span>
             </div>
 
-            {/* messages */}
-            <div className="px-6 py-6 space-y-4">
+            {/* Messages */}
+            <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {messages.map((msg, i) => (
                 <div
                   key={i}
-                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                  style={{
+                    display: 'flex',
+                    justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start',
+                  }}
                 >
                   <div
                     style={{
-                      maxWidth: '80%',
-                      padding: '10px 16px',
-                      borderRadius:
-                        msg.role === 'user'
-                          ? '12px 12px 4px 12px'
-                          : '12px 12px 12px 4px',
-                      fontFamily: 'var(--font-body)',
+                      maxWidth: '78%',
+                      padding: '10px 14px',
+                      borderRadius: msg.role === 'user' ? '12px 12px 2px 12px' : '12px 12px 12px 2px',
+                      background: msg.role === 'user' ? 'var(--pf-accent)' : 'var(--pf-bg)',
+                      color: msg.role === 'user' ? '#fff' : 'var(--pf-text-primary)',
                       fontSize: '14px',
-                      lineHeight: 1.6,
-                      background:
-                        msg.role === 'user' ? 'var(--text-primary)' : 'var(--bg-secondary)',
-                      color: msg.role === 'user' ? 'var(--bg)' : 'var(--text-primary)',
-                      border: msg.role === 'ai' ? '1px solid var(--border)' : 'none',
+                      lineHeight: 1.55,
+                      fontWeight: 300,
+                      border: msg.role === 'ai' ? '1px solid var(--pf-border)' : 'none',
                     }}
                   >
-                    {msg.content}
+                    {msg.text}
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* locked input */}
+            {/* Locked input */}
             <div
-              className="border-t flex items-center gap-3 px-5 py-4"
               style={{
-                borderColor: 'var(--border)',
-                background: 'var(--bg-secondary)',
-                opacity: 0.5,
-                cursor: 'not-allowed',
+                padding: '12px 16px',
+                borderTop: '1px solid var(--pf-border)',
+                display: 'flex',
+                gap: '8px',
+                opacity: 0.45,
                 pointerEvents: 'none',
+                cursor: 'not-allowed',
               }}
             >
-              <span
-                className="flex-1 text-sm"
-                style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-body)' }}
-              >
-                AI integration coming soon...
-              </span>
-              <button
-                disabled
+              <div
                 style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '13px',
-                  padding: '6px 14px',
-                  background: 'var(--text-muted)',
-                  color: 'var(--bg)',
-                  border: 'none',
-                  borderRadius: '6px',
+                  flex: 1,
+                  padding: '10px 14px',
+                  borderRadius: '8px',
+                  border: '1px solid var(--pf-border)',
+                  background: 'var(--pf-bg)',
+                  fontSize: '14px',
+                  color: 'var(--pf-text-muted)',
+                }}
+              >
+                Ask anything about Cem...
+              </div>
+              <div
+                style={{
+                  padding: '10px 18px',
+                  borderRadius: '8px',
+                  background: 'var(--pf-accent)',
+                  color: '#fff',
+                  fontSize: '14px',
+                  fontWeight: 500,
                 }}
               >
                 Send
-              </button>
+              </div>
             </div>
-          </CardGlow>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
     </section>
   )

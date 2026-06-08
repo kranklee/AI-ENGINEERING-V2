@@ -2,135 +2,137 @@
 
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import CardGlow from '@/components/effects/CardGlow'
-import SectionLabel from '@/components/ui/SectionLabel'
-
-const ease = [0.22, 1, 0.36, 1] as [number, number, number, number]
-
-const bioParas = [
-  "I'm a software engineering student at Centennial College in Ottawa, graduating in 2027. Canadian-Turkish, building toward a career in Cologne.",
-  "Came up through operations — airport security screening at CATSA, management at A&W, data work at Rogers. That path taught me how systems actually fail, not just how they look in a controlled demo.",
-  "Right now I'm deep in AI and backend engineering. FastAPI, RAG systems, LLM APIs. I think in pipelines.",
-  "Turkish is my first language. English fluent. German is a work in progress — good enough to order coffee, working on the rest. Cats over dogs.",
-]
 
 const infoRows = [
-  { label: 'Location', value: 'Ottawa → Cologne' },
-  { label: 'Education', value: "Centennial College '27" },
-  { label: 'Languages', value: 'TR · EN · DE (learning)' },
-  { label: 'Status', value: 'Open to work in Germany' },
-  { label: 'Interests', value: 'AI · Backend · IoT' },
+  { label: 'Location', value: 'Ottawa, Canada → Cologne, Germany' },
+  { label: 'Education', value: 'Software Engineering Technology, Centennial College 2027' },
+  { label: 'Languages', value: 'English (fluent), Turkish (native), German (learning)' },
+  { label: 'Status', value: 'Open to work — Germany-based roles preferred' },
+  { label: 'Interests', value: 'AI systems, embedded IoT, distributed backends' },
+]
+
+const paragraphs = [
+  "I'm a software engineering student in Ottawa, spending most of my time building things that live at the intersection of AI and regular software. Not always successfully, but that's the point.",
+  "Before the CS path I spent a few years in operations — data analysis at Rogers, security screening at CATSA, managing a restaurant. That stuff changed how I think about systems. Real users, real pressure, real breakage. It's different from classroom problems.",
+  "Right now I'm focused on getting to Germany by the time I graduate. There's a gap in the job market there for backend developers who understand AI tooling, and that's exactly where I'm trying to land. I've been learning German on the side, which is slower than I'd like.",
+  "When I'm not coding I'm usually reading about compiler design or watching Formula 1 races and pretending I understand the strategy. The AI Engineering repo you're looking at is me building in public — it's messy and ongoing, which is how most real work actually goes.",
 ]
 
 export default function About() {
-  const ref = useRef<HTMLElement>(null)
+  const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section
-      id="about"
-      ref={ref}
-      className="border-t"
-      style={{ borderColor: 'var(--border)', padding: '160px 0', zIndex: 2, position: 'relative' }}
-    >
+    <section id="about" ref={ref} style={{ position: 'relative', zIndex: 10, padding: '120px 0' }}>
       <div className="max-w-[1200px] mx-auto px-6 md:px-12">
-        <SectionLabel number="01" label="ABOUT" />
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '12px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            color: 'var(--pf-text-muted)',
+            marginBottom: '64px',
+          }}
+        >
+          01 — About
+        </motion.p>
 
-        <div className="grid md:grid-cols-[55%_1fr] gap-16 lg:gap-24 items-start">
-          {/* prose — left */}
-          <div className="space-y-6">
-            {bioParas.map((p, i) => (
+        <div className="grid md:grid-cols-[55%_45%] gap-16 md:gap-20">
+          {/* Left: bio */}
+          <div>
+            {paragraphs.map((p, i) => (
               <motion.p
                 key={i}
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '16px',
-                  fontWeight: 300,
-                  lineHeight: 1.9,
-                  color: 'var(--text-secondary)',
-                }}
-                initial={{ opacity: 0, y: 32 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.8, ease, delay: i * 0.15 }}
+                transition={{ duration: 0.6, delay: i * 0.12 }}
+                style={{
+                  fontSize: '17px',
+                  lineHeight: 1.75,
+                  color: i === 0 ? 'var(--pf-text-primary)' : 'var(--pf-text-secondary)',
+                  marginBottom: '24px',
+                  fontWeight: i === 0 ? 400 : 300,
+                }}
               >
                 {p}
               </motion.p>
             ))}
           </div>
 
-          {/* info card — right, sticky */}
-          <motion.div
-            className="md:sticky md:top-[120px]"
-            initial={{ opacity: 0, y: 32 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, ease, delay: 0.2 }}
-          >
-            <CardGlow
+          {/* Right: info card */}
+          <div className="md:sticky md:top-[100px] self-start">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.2 }}
               style={{
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border)',
-                borderRadius: '8px',
-                padding: '40px',
+                background: 'var(--pf-bg-secondary)',
+                borderRadius: '16px',
+                overflow: 'hidden',
+                border: '1px solid var(--pf-border)',
               }}
+            >
+              {infoRows.map(({ label, value }, i) => (
+                <div
+                  key={label}
+                  style={{
+                    padding: '16px 20px',
+                    borderBottom: i < infoRows.length - 1 ? '1px solid var(--pf-border)' : 'none',
+                  }}
+                >
+                  <p
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '10px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.1em',
+                      color: 'var(--pf-text-muted)',
+                      marginBottom: '4px',
+                    }}
+                  >
+                    {label}
+                  </p>
+                  <p style={{ fontSize: '14px', color: 'var(--pf-text-primary)', lineHeight: 1.5 }}>
+                    {value}
+                  </p>
+                </div>
+              ))}
+            </motion.div>
+
+            {/* Experience note */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.35 }}
+              style={{ marginTop: '16px', padding: '16px 20px', borderRadius: '12px', border: '1px solid var(--pf-border)' }}
             >
               <p
                 style={{
                   fontFamily: 'var(--font-mono)',
-                  fontSize: '12px',
+                  fontSize: '10px',
                   textTransform: 'uppercase',
-                  letterSpacing: '0.12em',
-                  color: 'var(--text-muted)',
-                  marginBottom: '24px',
+                  letterSpacing: '0.1em',
+                  color: 'var(--pf-text-muted)',
+                  marginBottom: '8px',
                 }}
               >
-                Quick facts
+                Experience
               </p>
-
-              <div>
-                {infoRows.map(({ label, value }, i) => (
-                  <div
-                    key={label}
-                    className="flex items-baseline gap-4 py-3"
-                    style={{
-                      borderBottom: i < infoRows.length - 1 ? '1px solid var(--border)' : 'none',
-                    }}
-                  >
-                    <span
-                      className="shrink-0 w-[120px]"
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '13px',
-                        color: 'var(--text-muted)',
-                      }}
-                    >
-                      {label}
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '14px',
-                        color: 'var(--text-primary)',
-                      }}
-                    >
-                      {value}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              <p
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '13px',
-                  color: 'var(--text-muted)',
-                  marginTop: '24px',
-                  lineHeight: 1.7,
-                }}
-              >
-                Currently working through FastAPI, RAG pipelines, and LLM API integration.
-              </p>
-            </CardGlow>
-          </motion.div>
+              {[
+                'Data Analyst @ Rogers Communications',
+                'Screening Officer @ CATSA',
+                'Assistant Manager @ A&W Canada',
+              ].map((job) => (
+                <p key={job} style={{ fontSize: '13px', color: 'var(--pf-text-secondary)', lineHeight: 1.8 }}>
+                  {job}
+                </p>
+              ))}
+            </motion.div>
+          </div>
         </div>
       </div>
     </section>

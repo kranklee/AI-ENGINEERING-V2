@@ -1,21 +1,15 @@
 import type { Metadata } from 'next'
-import { Playfair_Display, DM_Sans, JetBrains_Mono } from 'next/font/google'
-import CursorGlow from '@/components/effects/CursorGlow'
+import { Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google'
+import { ThemeProvider } from 'next-themes'
 import './globals.css'
 
-const playfair = Playfair_Display({
+const fontSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-display',
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-sans',
 })
 
-const dmSans = DM_Sans({
-  subsets: ['latin'],
-  weight: ['300', '400', '500'],
-  variable: '--font-body',
-})
-
-const jetbrains = JetBrains_Mono({
+const fontMono = JetBrains_Mono({
   subsets: ['latin'],
   weight: ['400'],
   variable: '--font-mono',
@@ -24,26 +18,16 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   title: 'Cem Besli — Software Engineer',
   description:
-    'Software engineering student at Centennial College. Building AI systems, backend APIs, and IoT solutions. Relocating to Cologne, Germany.',
-  metadataBase: new URL('https://cembesli.com'),
-  openGraph: {
-    title: 'Cem Besli — Software Engineer',
-    description: 'Building AI systems and backend solutions. Moving to Cologne.',
-    url: 'https://cembesli.com',
-    type: 'website',
-  },
-  robots: { index: true, follow: true },
+    'Software Engineering student at Centennial College. Building AI systems, backend services, and IoT projects. Open to work in Germany.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${playfair.variable} ${dmSans.variable} ${jetbrains.variable}`}
-    >
-      <body>
-        <CursorGlow />
-        {children}
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${fontSans.variable} ${fontMono.variable}`}>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )

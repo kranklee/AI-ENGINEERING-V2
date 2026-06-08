@@ -5,9 +5,17 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 const descriptors = [
   'Building AI systems.',
-  "Connecting things that shouldn't connect.",
+  'Connecting the unconnectable.',
   'Moving to Cologne.',
-  'Making software that works.',
+  'Making software work.',
+]
+
+const quickLinks = [
+  { label: 'About Me', href: '#about' },
+  { label: 'Projects', href: '#projects' },
+  { label: 'Skills', href: '#skills' },
+  { label: 'Contact', href: '#contact' },
+  { label: 'Status', href: '#contact' },
 ]
 
 const ease = [0.22, 1, 0.36, 1] as [number, number, number, number]
@@ -16,71 +24,101 @@ export default function Hero() {
   const [idx, setIdx] = useState(0)
 
   useEffect(() => {
-    const t = setInterval(() => setIdx(i => (i + 1) % descriptors.length), 3000)
+    const t = setInterval(() => setIdx((i) => (i + 1) % descriptors.length), 3000)
     return () => clearInterval(t)
   }, [])
 
   return (
-    <section id="hero" className="min-h-screen flex items-center relative" style={{ zIndex: 2 }}>
-      <div className="max-w-[1200px] mx-auto px-6 md:px-12 w-full py-32">
+    <section
+      id="hero"
+      className="relative min-h-screen flex items-center overflow-hidden"
+      style={{ zIndex: 10 }}
+    >
+      {/* Large watermark background text */}
+      <div
+        aria-hidden
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          fontFamily: 'var(--font-sans)',
+          fontWeight: 700,
+          fontSize: 'clamp(160px, 25vw, 320px)',
+          letterSpacing: '-0.04em',
+          color: 'var(--pf-text-primary)',
+          opacity: 0.03,
+          userSelect: 'none',
+          pointerEvents: 'none',
+          whiteSpace: 'nowrap',
+          lineHeight: 1,
+        }}
+      >
+        CEM
+      </div>
+
+      <div className="max-w-[1200px] mx-auto px-6 md:px-12 w-full py-40">
         <motion.p
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease }}
           style={{
             fontFamily: 'var(--font-mono)',
             fontSize: '12px',
             textTransform: 'uppercase',
-            letterSpacing: '0.12em',
-            color: 'var(--text-muted)',
-            marginBottom: '32px',
+            letterSpacing: '0.1em',
+            color: 'var(--pf-text-muted)',
+            marginBottom: '28px',
           }}
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease }}
         >
           Software Engineer · Ottawa → Cologne
         </motion.p>
 
-        <div
+        <h1
           style={{
-            fontFamily: 'var(--font-display)',
+            fontFamily: 'var(--font-sans)',
             fontWeight: 700,
-            fontSize: 'clamp(72px, 10vw, 120px)',
-            letterSpacing: '-0.02em',
-            lineHeight: 0.9,
-            color: 'var(--text-primary)',
+            fontSize: 'clamp(56px, 9vw, 100px)',
+            letterSpacing: '-0.03em',
+            lineHeight: 1.05,
+            color: 'var(--pf-text-primary)',
+            marginBottom: '24px',
           }}
         >
-          <motion.div
+          <motion.span
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease }}
+            transition={{ duration: 0.7, ease }}
+            style={{ display: 'block' }}
           >
             Cem
-          </motion.div>
-          <motion.div
+          </motion.span>
+          <motion.span
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.15, ease }}
+            transition={{ duration: 0.7, delay: 0.12, ease }}
+            style={{ display: 'block' }}
           >
-            Besli
-          </motion.div>
-        </div>
+            Besli.
+          </motion.span>
+        </h1>
 
-        {/* rotating descriptor */}
-        <div style={{ marginTop: '32px', minHeight: '44px', position: 'relative' }}>
+        {/* Rotating descriptor */}
+        <div style={{ minHeight: '40px', marginBottom: '20px', position: 'relative' }}>
           <AnimatePresence mode="wait">
             <motion.p
               key={idx}
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontStyle: 'italic',
-                fontSize: '28px',
-                color: 'var(--text-secondary)',
-                position: 'absolute',
-              }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.45 }}
+              style={{
+                fontFamily: 'var(--font-sans)',
+                fontSize: '22px',
+                fontWeight: 300,
+                color: 'var(--pf-text-secondary)',
+                position: 'absolute',
+              }}
             >
               {descriptors[idx]}
             </motion.p>
@@ -88,70 +126,109 @@ export default function Hero() {
         </div>
 
         <motion.p
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '15px',
-            fontWeight: 300,
-            color: 'var(--text-muted)',
-            marginTop: '32px',
-          }}
-          initial={{ opacity: 0, y: 32 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3, ease }}
+          transition={{ duration: 0.7, delay: 0.3, ease }}
+          style={{
+            fontSize: '17px',
+            fontWeight: 300,
+            color: 'var(--pf-text-muted)',
+            marginTop: '52px',
+            marginBottom: '36px',
+          }}
         >
           Centennial College &apos;27 · AI, backend, IoT · Open to work in Germany
         </motion.p>
 
+        {/* CTA buttons */}
         <motion.div
-          className="flex flex-wrap gap-3"
-          style={{ marginTop: '40px' }}
-          initial={{ opacity: 0, y: 32 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.45, ease }}
+          transition={{ duration: 0.7, delay: 0.42, ease }}
+          style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '40px' }}
         >
           <motion.a
             href="#projects"
+            whileHover={{ opacity: 0.88 }}
+            transition={{ duration: 0.15 }}
             style={{
-              background: 'var(--text-primary)',
-              color: 'var(--bg)',
-              fontFamily: 'var(--font-body)',
-              fontSize: '14px',
-              padding: '14px 32px',
-              borderRadius: '4px',
+              background: 'var(--pf-accent)',
+              color: '#fff',
+              fontFamily: 'var(--font-sans)',
+              fontSize: '15px',
+              fontWeight: 500,
+              padding: '13px 28px',
+              borderRadius: '980px',
               textDecoration: 'none',
               display: 'inline-block',
             }}
-            whileHover={{ opacity: 0.85 }}
-            transition={{ duration: 0.2 }}
           >
             View my work
           </motion.a>
-
           <motion.a
             href="https://github.com/kranklee"
             target="_blank"
             rel="noopener noreferrer"
+            whileHover={{ borderColor: 'var(--pf-text-primary)' }}
+            transition={{ duration: 0.15 }}
             style={{
               background: 'transparent',
-              color: 'var(--text-primary)',
-              fontFamily: 'var(--font-body)',
-              fontSize: '14px',
-              padding: '14px 32px',
-              borderRadius: '4px',
-              border: '1px solid var(--border-hover)',
+              color: 'var(--pf-text-primary)',
+              fontFamily: 'var(--font-sans)',
+              fontSize: '15px',
+              fontWeight: 500,
+              padding: '13px 28px',
+              borderRadius: '980px',
+              border: '1px solid var(--pf-border)',
               textDecoration: 'none',
               display: 'inline-block',
-              transition: 'border-color 0.2s ease',
             }}
-            whileHover={{ borderColor: 'var(--text-primary)' }}
-            transition={{ duration: 0.2 }}
           >
             GitHub ↗
           </motion.a>
         </motion.div>
+
+        {/* Quick-nav pills */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.55, ease }}
+          style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}
+        >
+          {quickLinks.map(({ label, href }) => (
+            <a
+              key={label}
+              href={href}
+              style={{
+                fontFamily: 'var(--font-sans)',
+                fontSize: '13px',
+                fontWeight: 400,
+                color: 'var(--pf-text-secondary)',
+                textDecoration: 'none',
+                padding: '6px 14px',
+                borderRadius: '980px',
+                border: '1px solid var(--pf-border)',
+                backdropFilter: 'blur(8px)',
+                transition: 'color 0.2s ease, border-color 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget
+                el.style.color = 'var(--pf-text-primary)'
+                el.style.borderColor = 'var(--pf-text-primary)'
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget
+                el.style.color = 'var(--pf-text-secondary)'
+                el.style.borderColor = 'var(--pf-border)'
+              }}
+            >
+              {label}
+            </a>
+          ))}
+        </motion.div>
       </div>
 
-      {/* floating scroll hint */}
+      {/* Scroll hint */}
       <motion.div
         className="absolute hidden md:block"
         style={{
@@ -159,7 +236,7 @@ export default function Hero() {
           right: '48px',
           fontFamily: 'var(--font-mono)',
           fontSize: '11px',
-          color: 'var(--text-muted)',
+          color: 'var(--pf-text-muted)',
           textTransform: 'uppercase',
           letterSpacing: '0.1em',
         }}
