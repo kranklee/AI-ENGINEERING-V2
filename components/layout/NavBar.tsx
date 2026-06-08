@@ -21,6 +21,19 @@ export default function NavBar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // lock body scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [menuOpen])
+
+  // close on ESC
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setMenuOpen(false) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
   // I'll clean this up later — could use a single observer with rootMargin tricks
   useEffect(() => {
     const ids = ['about', 'skills', 'projects', 'contact']
@@ -40,6 +53,8 @@ export default function NavBar() {
     return () => observers.forEach(o => o.disconnect())
   }, [])
 
+  const close = () => setMenuOpen(false)
+
   return (
     <>
       <nav
@@ -56,6 +71,7 @@ export default function NavBar() {
             href="#hero"
             className="text-[20px] font-normal"
             style={{ fontFamily: 'var(--font-display)', color: 'var(--accent)' }}
+            onClick={close}
           >
             CB
           </a>
@@ -82,29 +98,31 @@ export default function NavBar() {
           </div>
 
           <button
-            className="md:hidden flex flex-col justify-center items-center gap-1.5 w-8 h-8"
+            className="md:hidden flex flex-col justify-center items-center gap-1.5 w-8 h-8 focus:outline-none"
             onClick={() => setMenuOpen(o => !o)}
             aria-label="Toggle navigation"
+            aria-expanded={menuOpen}
           >
             <span
-              className="block w-5 h-px transition-transform duration-200 origin-center"
+              className="block w-5 h-px transition-all duration-200 origin-center"
               style={{
                 background: 'var(--text-secondary)',
-                transform: menuOpen ? 'rotate(45deg) translateY(4px)' : 'none',
+                transform: menuOpen ? 'translateY(6px) rotate(45deg)' : 'none',
               }}
             />
             <span
-              className="block w-5 h-px transition-opacity duration-200"
+              className="block w-5 h-px transition-all duration-200"
               style={{
                 background: 'var(--text-secondary)',
                 opacity: menuOpen ? 0 : 1,
+                transform: menuOpen ? 'scaleX(0)' : 'none',
               }}
             />
             <span
-              className="block w-5 h-px transition-transform duration-200 origin-center"
+              className="block w-5 h-px transition-all duration-200 origin-center"
               style={{
                 background: 'var(--text-secondary)',
-                transform: menuOpen ? 'rotate(-45deg) translateY(-4px)' : 'none',
+                transform: menuOpen ? 'translateY(-6px) rotate(-45deg)' : 'none',
               }}
             />
           </button>
@@ -114,7 +132,7 @@ export default function NavBar() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            className="fixed inset-0 z-40 flex flex-col items-center justify-center md:hidden"
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center"
             style={{ background: 'var(--bg-primary)' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -131,7 +149,7 @@ export default function NavBar() {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.06, duration: 0.3 }}
-                  onClick={() => setMenuOpen(false)}
+                  onClick={close}
                 >
                   {link.label}
                 </motion.a>
