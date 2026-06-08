@@ -4,6 +4,8 @@ import useFluidCursor from '@/hooks/use-FluidCursor';
 
 const FluidCursor = () => {
   useEffect(() => {
+    // Skip on touch-only devices — WebGL fluid isn't useful without mouse
+    if (window.matchMedia('(pointer: coarse)').matches) return;
     useFluidCursor();
   }, []);
   return (
