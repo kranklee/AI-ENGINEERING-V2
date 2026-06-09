@@ -2,9 +2,8 @@
 import { useEffect } from 'react';
 import useFluidCursor from '@/hooks/use-FluidCursor';
 
-const FluidCursor = () => {
+export default function FluidCursor() {
   useEffect(() => {
-    // Skip on touch-only devices — WebGL fluid isn't useful without mouse
     if (window.matchMedia('(pointer: coarse)').matches) return;
     useFluidCursor();
   }, []);
@@ -13,5 +12,4 @@ const FluidCursor = () => {
       <canvas id="fluid" className="h-screen w-screen" />
     </div>
   );
-};
-export default FluidCursor;
+}

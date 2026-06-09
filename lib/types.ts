@@ -1,13 +1,31 @@
 export interface Project {
   id: string
-  number: string
   title: string
-  description: string
+  hook: string
+  problem: string
+  solution: string
   stack: string[]
+  outcome: string
   url?: string
 }
 
-export interface SkillGroup {
-  category: string
-  skills: string[]
+export interface FocusCard {
+  icon: string
+  name: string
+  description: string
+  intensity: number // 0-100
+}
+
+export interface JourneyNode {
+  emoji: string
+  label: string
+  lines: string[]
+}
+
+export interface Repo {
+  name: string
+  description: string
+  language: string
+  stars: number
+  updatedAt: string
 }
