@@ -5,7 +5,7 @@ import useFluidCursor from '@/hooks/use-FluidCursor';
 export default function FluidCursor() {
   useEffect(() => {
     if (window.matchMedia('(pointer: coarse)').matches) return;
-    useFluidCursor();
+    return useFluidCursor();
   }, []);
 
   return (

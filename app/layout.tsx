@@ -1,45 +1,32 @@
-import type { Metadata } from 'next';
-import { Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
-import { ThemeProvider } from 'next-themes';
-import SmoothScroll from '@/components/SmoothScroll';
-import './globals.css';
-
-const sans = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  variable: '--font-sans',
-  display: 'swap',
-});
-
-const mono = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-mono',
-  display: 'swap',
-});
+import type { Metadata } from 'next'
+import './globals.css'
+import { StoreProvider } from '@/lib/store'
+import FluidCursor from '@/components/FluidCursor'
+import SmoothScroll from '@/components/SmoothScroll'
 
 export const metadata: Metadata = {
   title: 'Cem Besli — Backend Engineer',
-  description: 'Portfolio of Cem Besli, a backend-focused software engineering student building systems with Python, Docker, and PostgreSQL.',
+  description: 'Software engineering student moving from Ontario to Cologne. Backend, Linux, Docker, PostgreSQL, FastAPI.',
+  metadataBase: new URL('https://cembesli.com'),
   openGraph: {
     title: 'Cem Besli — Backend Engineer',
-    description: 'Portfolio of Cem Besli — backend systems, APIs, and infrastructure.',
+    description: 'Backend engineer relocating to Cologne, Germany.',
+    url: 'https://cembesli.com',
     type: 'website',
   },
-};
+}
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${sans.variable} ${mono.variable}`}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+    <html lang="en" data-theme="dark" suppressHydrationWarning>
+      <body>
+        <StoreProvider>
           <SmoothScroll>
+            <FluidCursor />
             {children}
           </SmoothScroll>
-        </ThemeProvider>
+        </StoreProvider>
       </body>
     </html>
-  );
+  )
 }

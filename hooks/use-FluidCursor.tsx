@@ -1,9 +1,6 @@
 // @ts-nocheck
-import { useEffect } from 'react';
-
 export default function useFluidCursor() {
-  useEffect(() => {
-    const canvas = document.getElementById('fluid') as HTMLCanvasElement;
+  const canvas = document.getElementById('fluid') as HTMLCanvasElement;
     if (!canvas) return;
 
     const config = {
@@ -764,5 +761,4 @@ export default function useFluidCursor() {
     update();
 
     return () => { cancelAnimationFrame(animId); };
-  }, []);
 }

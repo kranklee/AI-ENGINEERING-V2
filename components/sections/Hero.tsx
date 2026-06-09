@@ -1,207 +1,125 @@
-'use client';
-import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ArrowDown, GitFork, Mail } from 'lucide-react';
-
-const roles = ['Backend Engineer', 'Systems Builder', 'Linux Enthusiast', 'API Designer'];
+'use client'
+import { useStore } from '@/lib/store'
+import { t } from '@/lib/i18n'
+import { useEffect, useRef } from 'react'
 
 export default function Hero() {
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const subtitleRef = useRef<HTMLParagraphElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
-  const roleRef = useRef<HTMLSpanElement>(null);
-  const roleIndex = useRef(0);
+  const { lang } = useStore()
+  const tx = t[lang].hero
+  const dotRef = useRef<HTMLSpanElement>(null)
 
-  // Entrance animation
+  // Breathing dot animation
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        [titleRef.current, subtitleRef.current, ctaRef.current],
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.9, stagger: 0.18, ease: 'power3.out', delay: 0.2 }
-      );
-    });
-    return () => ctx.revert();
-  }, []);
-
-  // Role cycling
-  useEffect(() => {
-    const el = roleRef.current;
-    if (!el) return;
-
-    const cycle = () => {
-      gsap.to(el, {
-        opacity: 0, y: -10, duration: 0.3, ease: 'power2.in',
-        onComplete: () => {
-          roleIndex.current = (roleIndex.current + 1) % roles.length;
-          el.textContent = roles[roleIndex.current];
-          gsap.to(el, { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' });
-        },
-      });
-    };
-
-    el.textContent = roles[0];
-    const id = setInterval(cycle, 2600);
-    return () => clearInterval(id);
-  }, []);
+    let opacity = 1
+    let dir = -1
+    const iv = setInterval(() => {
+      opacity += dir * 0.04
+      if (opacity <= 0.2) dir = 1
+      if (opacity >= 1) dir = -1
+      if (dotRef.current) dotRef.current.style.opacity = String(opacity)
+    }, 50)
+    return () => clearInterval(iv)
+  }, [])
 
   return (
     <section
+      id="hero"
       style={{
         minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '100px 24px 60px',
+        display: 'grid',
+        gridTemplateColumns: '1.1fr 0.9fr',
         position: 'relative',
-        overflow: 'hidden',
+        zIndex: 1,
+        paddingTop: 72,
+        fontFamily: 'var(--font-sans)',
       }}
     >
-      {/* Subtle radial glow */}
-      <div style={{
-        position: 'absolute',
-        top: '30%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 600,
-        height: 600,
-        background: 'radial-gradient(circle, var(--pf-accent-glow) 0%, transparent 70%)',
-        pointerEvents: 'none',
-      }} />
-
-      <div style={{ maxWidth: 800, width: '100%', position: 'relative', zIndex: 1 }}>
-        {/* Pre-title */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
-          <div style={{ width: 32, height: 1, background: 'var(--pf-accent)' }} />
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--pf-accent)', letterSpacing: 3, textTransform: 'uppercase' }}>
-            Available for opportunities
-          </span>
+      {/* Left column */}
+      <div style={{ padding: '56px 32px 48px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderRight: '1px solid var(--br)' }}>
+        <div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--tx3)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 20 }}>
+            {tx.eyebrow}
+          </div>
+          <h1 style={{ fontSize: 'clamp(52px,8vw,88px)', fontWeight: 800, lineHeight: 0.9, letterSpacing: '-0.04em', color: 'var(--tx)', marginBottom: 0 }}>
+            {tx.h1}<br />
+            <span style={{ color: 'var(--tx2)', fontWeight: 300 }}>{tx.h1acc}</span>
+          </h1>
+          <div style={{ width: 40, height: 1.5, background: 'var(--br2)', margin: '22px 0' }} />
+          <p style={{ fontSize: 15, fontWeight: 300, color: 'var(--tx2)', lineHeight: 1.75, maxWidth: 320, marginBottom: 36 }}>
+            {tx.sub}
+          </p>
         </div>
-
-        {/* Main heading */}
-        <h1
-          ref={titleRef}
-          style={{
-            fontSize: 'clamp(40px, 7vw, 80px)',
-            fontWeight: 800,
-            lineHeight: 1.05,
-            margin: '0 0 8px',
-            letterSpacing: -2,
-            color: 'var(--pf-text)',
-          }}
-        >
-          Cem Besli
-        </h1>
-
-        {/* Role line */}
-        <div style={{ marginBottom: 24, height: 48, display: 'flex', alignItems: 'center' }}>
-          <span
-            ref={roleRef}
-            style={{
-              fontSize: 'clamp(22px, 4vw, 38px)',
-              fontWeight: 700,
-              color: 'var(--pf-accent)',
-              letterSpacing: -1,
-            }}
-          />
-        </div>
-
-        {/* Subtitle */}
-        <p
-          ref={subtitleRef}
-          style={{
-            fontSize: 'clamp(15px, 2vw, 18px)',
-            color: 'var(--pf-muted)',
-            lineHeight: 1.7,
-            maxWidth: 560,
-            margin: '0 0 48px',
-          }}
-        >
-          Software engineering student based in Cologne. I build backend systems —
-          APIs, containerised services, and developer tooling that actually scales.
-        </p>
-
-        {/* CTAs */}
-        <div ref={ctaRef} style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           <button
-            onClick={() => document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
             style={{
-              background: 'var(--pf-accent)',
-              color: '#fff',
-              border: 'none',
-              borderRadius: 10,
-              padding: '13px 28px',
-              fontSize: 14,
-              fontWeight: 600,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-              transition: 'opacity 0.2s, transform 0.2s',
+              background: 'var(--btn-bg)', color: 'var(--btn-tx)', border: 'none',
+              padding: '10px 22px', fontSize: 13, fontWeight: 500, cursor: 'pointer',
+              fontFamily: 'var(--font-sans)', borderRadius: 6, transition: 'all 0.2s',
             }}
-            onMouseEnter={e => { e.currentTarget.style.opacity = '0.85'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-            onMouseLeave={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'translateY(0)'; }}
+            onMouseEnter={e => { e.currentTarget.style.opacity = '0.85'; e.currentTarget.style.transform = 'translateY(-1px)' }}
+            onMouseLeave={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'translateY(0)' }}
           >
-            View Projects <ArrowDown size={15} />
+            {tx.cta} →
           </button>
-
           <a
             href="https://github.com/kranklee"
             target="_blank"
             rel="noopener noreferrer"
             style={{
-              background: 'var(--pf-surface)',
-              color: 'var(--pf-text)',
-              border: '1px solid var(--pf-border-bright)',
-              borderRadius: 10,
-              padding: '12px 24px',
-              fontSize: 14,
-              fontWeight: 600,
-              textDecoration: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-              transition: 'border-color 0.2s, transform 0.2s',
+              background: 'transparent', color: 'var(--tx2)', border: '1px solid var(--br)',
+              padding: '9px 22px', fontSize: 13, textDecoration: 'none', fontFamily: 'var(--font-sans)',
+              borderRadius: 6, transition: 'all 0.2s', display: 'inline-block',
             }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--pf-accent)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--pf-border-bright)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--tx)'; e.currentTarget.style.color = 'var(--tx)' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--br)'; e.currentTarget.style.color = 'var(--tx2)' }}
           >
-            <GitFork size={15} /> GitHub
+            {tx.github}
           </a>
-
-          <a
-            href="mailto:cembesli99@gmail.com"
-            style={{
-              color: 'var(--pf-muted)',
-              textDecoration: 'none',
-              fontSize: 14,
-              fontWeight: 500,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              transition: 'color 0.2s',
-            }}
-            onMouseEnter={e => (e.currentTarget.style.color = 'var(--pf-text)')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'var(--pf-muted)')}
-          >
-            <Mail size={14} /> cembesli99@gmail.com
-          </a>
-        </div>
-
-        {/* Quick stats */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 32, marginTop: 64, paddingTop: 40, borderTop: '1px solid var(--pf-border)' }}>
-          {[
-            { num: '3+', label: 'Years of coding' },
-            { num: '10+', label: 'Projects shipped' },
-            { num: 'Cologne', label: 'Based in Germany' },
-          ].map(s => (
-            <div key={s.label}>
-              <div style={{ fontSize: 28, fontWeight: 800, color: 'var(--pf-text)', letterSpacing: -1 }}>{s.num}</div>
-              <div style={{ fontSize: 12, color: 'var(--pf-muted)', marginTop: 2, fontFamily: 'var(--font-mono)' }}>{s.label}</div>
-            </div>
-          ))}
         </div>
       </div>
+
+      {/* Right column */}
+      <div style={{ padding: '56px 32px 48px', display: 'flex', flexDirection: 'column' }}>
+        {[
+          { label: 'Focus', value: tx.focus },
+          { label: 'Education', value: tx.education },
+          { label: 'Location', value: tx.location },
+          { label: 'Stack', value: 'Python · FastAPI · Docker · PostgreSQL · Linux · RAG · LLM APIs', mono: true },
+        ].map((row, i) => (
+          <div key={i} style={{ padding: '14px 0', borderBottom: '1px solid var(--br)' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--tx3)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>
+              {row.label}
+            </div>
+            <div style={{ fontSize: 13, color: 'var(--tx2)', fontFamily: row.mono ? 'var(--font-mono)' : 'var(--font-sans)', lineHeight: 1.6 }}>
+              {row.value}
+            </div>
+          </div>
+        ))}
+
+        <div style={{ marginTop: 'auto', paddingTop: 24, display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span
+            ref={dotRef}
+            style={{ width: 7, height: 7, borderRadius: '50%', background: '#22c55e', display: 'inline-block', flexShrink: 0 }}
+          />
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--tx3)', letterSpacing: '0.05em' }}>
+            {tx.available}
+          </span>
+        </div>
+      </div>
+
+      {/* Bottom labels */}
+      <div style={{ position: 'absolute', bottom: 20, left: 32, fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--tx3)', letterSpacing: '0.05em' }}>
+        cembesli.com
+      </div>
+      <div style={{ position: 'absolute', bottom: 20, right: 32, fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--tx3)', letterSpacing: '0.06em' }}>
+        scroll ↓
+      </div>
+
+      {/* Background initials */}
+      <div style={{ position: 'absolute', bottom: -20, right: 20, fontFamily: 'var(--font-sans)', fontSize: 180, fontWeight: 900, lineHeight: 1, color: 'rgba(255,255,255,0.018)', pointerEvents: 'none', userSelect: 'none', letterSpacing: '-0.06em', zIndex: 0 }}>
+        CB
+      </div>
     </section>
-  );
+  )
 }
