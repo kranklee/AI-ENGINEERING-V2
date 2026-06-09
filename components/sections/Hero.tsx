@@ -1,56 +1,35 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-
-const descriptors = [
-  'Building AI systems.',
-  'Connecting the unconnectable.',
-  'Moving to Cologne.',
-  'Making software work.',
-]
-
-const quickLinks = [
-  { label: 'About Me', href: '#about' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Contact', href: '#contact' },
-  { label: 'Status', href: '#contact' },
-]
+import { motion } from 'framer-motion'
 
 const ease = [0.22, 1, 0.36, 1] as [number, number, number, number]
 
+const quickLinks = [
+  { label: 'About', href: '#about' },
+  { label: 'Stack', href: '#stack' },
+  { label: 'Projects', href: '#projects' },
+  { label: 'GitHub', href: '#github' },
+  { label: 'Contact', href: '#contact' },
+]
+
 export default function Hero() {
-  const [idx, setIdx] = useState(0)
-
-  useEffect(() => {
-    const t = setInterval(() => setIdx((i) => (i + 1) % descriptors.length), 3000)
-    return () => clearInterval(t)
-  }, [])
-
   return (
-    <section
-      id="hero"
-      className="relative min-h-screen flex items-center overflow-hidden"
-      style={{ zIndex: 10 }}
-    >
-      {/* Large watermark background text */}
+    <section id="hero" className="relative min-h-screen flex items-center overflow-hidden" style={{ zIndex: 10 }}>
+      {/* Ghost watermark */}
       <div
         aria-hidden
         style={{
           position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
+          bottom: '5%',
+          right: '-2%',
           fontFamily: 'var(--font-sans)',
           fontWeight: 700,
-          fontSize: 'clamp(160px, 25vw, 320px)',
+          fontSize: 'clamp(200px, 30vw, 400px)',
           letterSpacing: '-0.04em',
-          color: 'var(--pf-text-primary)',
+          color: 'var(--pf-text)',
           opacity: 0.03,
           userSelect: 'none',
           pointerEvents: 'none',
-          whiteSpace: 'nowrap',
           lineHeight: 1,
         }}
       >
@@ -58,31 +37,46 @@ export default function Hero() {
       </div>
 
       <div className="max-w-[1200px] mx-auto px-6 md:px-12 w-full py-40">
-        <motion.p
-          initial={{ opacity: 0, y: 24 }}
+        {/* Status badge */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease }}
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '12px',
-            textTransform: 'uppercase',
-            letterSpacing: '0.1em',
-            color: 'var(--pf-text-muted)',
-            marginBottom: '28px',
-          }}
+          transition={{ duration: 0.6, ease }}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '40px' }}
         >
-          Software Engineer · Ottawa → Cologne
-        </motion.p>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '6px 14px',
+              borderRadius: '999px',
+              border: '1px solid var(--pf-border)',
+              backdropFilter: 'blur(8px)',
+              background: 'rgba(255,255,255,0.04)',
+            }}
+          >
+            <motion.span
+              animate={{ opacity: [1, 0.3, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#30d158', display: 'inline-block', flexShrink: 0 }}
+            />
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', fontWeight: 400, color: 'var(--pf-muted)' }}>
+              Open to work in Germany
+            </span>
+          </div>
+        </motion.div>
 
+        {/* Headline */}
         <h1
           style={{
             fontFamily: 'var(--font-sans)',
             fontWeight: 700,
-            fontSize: 'clamp(56px, 9vw, 100px)',
+            fontSize: 'clamp(72px, 12vw, 140px)',
             letterSpacing: '-0.03em',
-            lineHeight: 1.05,
-            color: 'var(--pf-text-primary)',
-            marginBottom: '24px',
+            lineHeight: 0.95,
+            color: 'var(--pf-text)',
+            marginBottom: '28px',
           }}
         >
           <motion.span
@@ -91,65 +85,60 @@ export default function Hero() {
             transition={{ duration: 0.7, ease }}
             style={{ display: 'block' }}
           >
-            Cem
+            Backend
           </motion.span>
           <motion.span
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.12, ease }}
+            transition={{ duration: 0.7, delay: 0.15, ease }}
             style={{ display: 'block' }}
           >
-            Besli.
+            Engineering.
           </motion.span>
         </h1>
 
-        {/* Rotating descriptor */}
-        <div style={{ minHeight: '40px', marginBottom: '20px', position: 'relative' }}>
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={idx}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.45 }}
-              style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: '22px',
-                fontWeight: 300,
-                color: 'var(--pf-text-secondary)',
-                position: 'absolute',
-              }}
-            >
-              {descriptors[idx]}
-            </motion.p>
-          </AnimatePresence>
-        </div>
-
+        {/* Sub-headline */}
         <motion.p
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.3, ease }}
           style={{
-            fontSize: '17px',
-            fontWeight: 300,
-            color: 'var(--pf-text-muted)',
-            marginTop: '52px',
-            marginBottom: '36px',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '14px',
+            color: 'var(--pf-muted)',
+            letterSpacing: '0.05em',
+            marginBottom: '20px',
           }}
         >
-          Centennial College &apos;27 · AI, backend, IoT · Open to work in Germany
+          Linux · Docker · PostgreSQL · APIs · Automation
         </motion.p>
 
-        {/* CTA buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
+        {/* Description */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.42, ease }}
-          style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '40px' }}
+          transition={{ duration: 0.7, delay: 0.38, ease }}
+          style={{
+            fontFamily: 'var(--font-sans)',
+            fontSize: '18px',
+            fontWeight: 300,
+            color: 'var(--pf-muted)',
+            marginBottom: '40px',
+          }}
+        >
+          Software Engineering student moving from Ontario to Cologne, Germany.
+        </motion.p>
+
+        {/* CTAs */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.46, ease }}
+          style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '48px' }}
         >
           <motion.a
             href="#projects"
-            whileHover={{ opacity: 0.88 }}
+            whileHover={{ opacity: 0.85 }}
             transition={{ duration: 0.15 }}
             style={{
               background: 'var(--pf-accent)',
@@ -157,8 +146,8 @@ export default function Hero() {
               fontFamily: 'var(--font-sans)',
               fontSize: '15px',
               fontWeight: 500,
-              padding: '13px 28px',
-              borderRadius: '980px',
+              padding: '12px 24px',
+              borderRadius: '8px',
               textDecoration: 'none',
               display: 'inline-block',
             }}
@@ -169,16 +158,16 @@ export default function Hero() {
             href="https://github.com/kranklee"
             target="_blank"
             rel="noopener noreferrer"
-            whileHover={{ borderColor: 'var(--pf-text-primary)' }}
+            whileHover={{ borderColor: 'var(--pf-text)' }}
             transition={{ duration: 0.15 }}
             style={{
               background: 'transparent',
-              color: 'var(--pf-text-primary)',
+              color: 'var(--pf-text)',
               fontFamily: 'var(--font-sans)',
               fontSize: '15px',
               fontWeight: 500,
-              padding: '13px 28px',
-              borderRadius: '980px',
+              padding: '12px 24px',
+              borderRadius: '8px',
               border: '1px solid var(--pf-border)',
               textDecoration: 'none',
               display: 'inline-block',
@@ -190,9 +179,9 @@ export default function Hero() {
 
         {/* Quick-nav pills */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.55, ease }}
+          transition={{ duration: 0.6, delay: 0.56, ease }}
           style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}
         >
           {quickLinks.map(({ label, href }) => (
@@ -203,24 +192,16 @@ export default function Hero() {
                 fontFamily: 'var(--font-sans)',
                 fontSize: '13px',
                 fontWeight: 400,
-                color: 'var(--pf-text-secondary)',
+                color: 'var(--pf-muted)',
                 textDecoration: 'none',
-                padding: '6px 14px',
-                borderRadius: '980px',
+                padding: '5px 14px',
+                borderRadius: '999px',
                 border: '1px solid var(--pf-border)',
                 backdropFilter: 'blur(8px)',
                 transition: 'color 0.2s ease, border-color 0.2s ease',
               }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget
-                el.style.color = 'var(--pf-text-primary)'
-                el.style.borderColor = 'var(--pf-text-primary)'
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget
-                el.style.color = 'var(--pf-text-secondary)'
-                el.style.borderColor = 'var(--pf-border)'
-              }}
+              onMouseEnter={e => { const el = e.currentTarget; el.style.color = 'var(--pf-text)'; el.style.borderColor = 'var(--pf-muted)' }}
+              onMouseLeave={e => { const el = e.currentTarget; el.style.color = 'var(--pf-muted)'; el.style.borderColor = 'var(--pf-border)' }}
             >
               {label}
             </a>
@@ -228,20 +209,11 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Scroll hint */}
       <motion.div
         className="absolute hidden md:block"
-        style={{
-          bottom: '48px',
-          right: '48px',
-          fontFamily: 'var(--font-mono)',
-          fontSize: '11px',
-          color: 'var(--pf-text-muted)',
-          textTransform: 'uppercase',
-          letterSpacing: '0.1em',
-        }}
+        style={{ bottom: '48px', right: '48px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--pf-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}
         animate={{ y: [0, 6, 0] }}
-        transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
       >
         Scroll ↓
       </motion.div>

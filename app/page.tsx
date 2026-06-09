@@ -3,10 +3,11 @@
 import FluidCursor from '@/components/FluidCursor'
 import NavBar from '@/components/NavBar'
 import Hero from '@/components/sections/Hero'
-import About from '@/components/sections/About'
-import Skills from '@/components/sections/Skills'
+import Terminal from '@/components/sections/Terminal'
+import Journey from '@/components/sections/Journey'
+import Dashboard from '@/components/sections/Dashboard'
 import Projects from '@/components/sections/Projects'
-import AIChat from '@/components/sections/AIChat'
+import GitHub from '@/components/sections/GitHub'
 import Contact from '@/components/sections/Contact'
 import Footer from '@/components/Footer'
 
@@ -17,10 +18,11 @@ export default function Home() {
       <NavBar />
       <main style={{ position: 'relative', zIndex: 10 }}>
         <Hero />
-        <About />
-        <Skills />
+        <Terminal />
+        <Journey />
+        <Dashboard />
         <Projects />
-        <AIChat />
+        <GitHub />
         <Contact />
       </main>
       <Footer />

@@ -16,9 +16,8 @@ const fontMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Cem Besli — Software Engineer',
-  description:
-    'Software Engineering student at Centennial College. Building AI systems, backend services, and IoT projects. Open to work in Germany.',
+  title: 'Cem Besli — Backend Engineer',
+  description: 'Backend engineering. Linux, Docker, PostgreSQL, APIs. Moving from Ontario to Cologne, Germany.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
