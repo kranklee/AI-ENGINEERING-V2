@@ -30,7 +30,7 @@ export default function Projects() {
     const ctx = gsap.context(() => {
       const totalWidth = track.scrollWidth - window.innerWidth;
 
-      gsap.to(track, {
+      const st = gsap.to(track, {
         x: () => -totalWidth,
         ease: 'none',
         scrollTrigger: {
@@ -41,8 +41,15 @@ export default function Projects() {
           anticipatePin: 1,
           scrub: 1,
           invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            // Update progress bar
+            const bar = section.querySelector('.scroll-progress-bar') as HTMLElement;
+            if (bar) bar.style.width = `${self.progress * 100}%`;
+          },
         },
       });
+
+      return () => st.kill();
     }, section);
 
     return () => ctx.revert();
@@ -86,6 +93,27 @@ export default function Projects() {
           gap: 12,
         }}>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--pf-accent)', letterSpacing: 3, textTransform: 'uppercase' }}>02 — Projects</span>
+        </div>
+
+        {/* Scroll progress bar */}
+        <div style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: 2,
+          background: 'var(--pf-border)',
+          zIndex: 10,
+        }}>
+          <div
+            className="scroll-progress-bar"
+            style={{
+              height: '100%',
+              width: '0%',
+              background: 'var(--pf-accent)',
+              transition: 'width 0.05s linear',
+            }}
+          />
         </div>
 
         {/* Horizontal track */}
