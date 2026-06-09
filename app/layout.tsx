@@ -1,33 +1,45 @@
-import type { Metadata } from 'next'
-import { Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google'
-import { ThemeProvider } from 'next-themes'
-import './globals.css'
+import type { Metadata } from 'next';
+import { Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
+import { ThemeProvider } from 'next-themes';
+import SmoothScroll from '@/components/SmoothScroll';
+import './globals.css';
 
-const fontSans = Plus_Jakarta_Sans({
+const sans = Plus_Jakarta_Sans({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
   variable: '--font-sans',
-})
+  display: 'swap',
+});
 
-const fontMono = JetBrains_Mono({
+const mono = JetBrains_Mono({
   subsets: ['latin'],
-  weight: ['400'],
   variable: '--font-mono',
-})
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'Cem Besli — Backend Engineer',
-  description: 'Backend engineering. Linux, Docker, PostgreSQL, APIs. Moving from Ontario to Cologne, Germany.',
-}
+  description: 'Portfolio of Cem Besli, a backend-focused software engineering student building systems with Python, Docker, and PostgreSQL.',
+  openGraph: {
+    title: 'Cem Besli — Backend Engineer',
+    description: 'Portfolio of Cem Besli — backend systems, APIs, and infrastructure.',
+    type: 'website',
+  },
+};
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${fontSans.variable} ${fontMono.variable}`}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-          {children}
+      <body className={`${sans.variable} ${mono.variable}`}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+          <SmoothScroll>
+            {children}
+          </SmoothScroll>
         </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }

@@ -1,222 +1,207 @@
-'use client'
+'use client';
+import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ArrowDown, GitFork, Mail } from 'lucide-react';
 
-import { motion } from 'framer-motion'
-
-const ease = [0.22, 1, 0.36, 1] as [number, number, number, number]
-
-const quickLinks = [
-  { label: 'About', href: '#about' },
-  { label: 'Stack', href: '#stack' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'GitHub', href: '#github' },
-  { label: 'Contact', href: '#contact' },
-]
+const roles = ['Backend Engineer', 'Systems Builder', 'Linux Enthusiast', 'API Designer'];
 
 export default function Hero() {
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+  const roleRef = useRef<HTMLSpanElement>(null);
+  const roleIndex = useRef(0);
+
+  // Entrance animation
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        [titleRef.current, subtitleRef.current, ctaRef.current],
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.9, stagger: 0.18, ease: 'power3.out', delay: 0.2 }
+      );
+    });
+    return () => ctx.revert();
+  }, []);
+
+  // Role cycling
+  useEffect(() => {
+    const el = roleRef.current;
+    if (!el) return;
+
+    const cycle = () => {
+      gsap.to(el, {
+        opacity: 0, y: -10, duration: 0.3, ease: 'power2.in',
+        onComplete: () => {
+          roleIndex.current = (roleIndex.current + 1) % roles.length;
+          el.textContent = roles[roleIndex.current];
+          gsap.to(el, { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' });
+        },
+      });
+    };
+
+    el.textContent = roles[0];
+    const id = setInterval(cycle, 2600);
+    return () => clearInterval(id);
+  }, []);
+
   return (
-    <section id="hero" className="relative min-h-screen flex items-center overflow-hidden" style={{ zIndex: 10 }}>
-      {/* Ghost watermark */}
-      <div
-        aria-hidden
-        style={{
-          position: 'absolute',
-          bottom: '5%',
-          right: '-2%',
-          fontFamily: 'var(--font-sans)',
-          fontWeight: 700,
-          fontSize: 'clamp(200px, 30vw, 400px)',
-          letterSpacing: '-0.04em',
-          color: 'var(--pf-text)',
-          opacity: 0.03,
-          userSelect: 'none',
-          pointerEvents: 'none',
-          lineHeight: 1,
-        }}
-      >
-        CEM
-      </div>
+    <section
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '100px 24px 60px',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Subtle radial glow */}
+      <div style={{
+        position: 'absolute',
+        top: '30%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 600,
+        height: 600,
+        background: 'radial-gradient(circle, var(--pf-accent-glow) 0%, transparent 70%)',
+        pointerEvents: 'none',
+      }} />
 
-      <div className="max-w-[1200px] mx-auto px-6 md:px-12 w-full py-40">
-        {/* Status badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease }}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '40px' }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '6px 14px',
-              borderRadius: '999px',
-              border: '1px solid var(--pf-border)',
-              backdropFilter: 'blur(8px)',
-              background: 'rgba(255,255,255,0.04)',
-            }}
-          >
-            <motion.span
-              animate={{ opacity: [1, 0.3, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#30d158', display: 'inline-block', flexShrink: 0 }}
-            />
-            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', fontWeight: 400, color: 'var(--pf-muted)' }}>
-              Open to work in Germany
-            </span>
-          </div>
-        </motion.div>
+      <div style={{ maxWidth: 800, width: '100%', position: 'relative', zIndex: 1 }}>
+        {/* Pre-title */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
+          <div style={{ width: 32, height: 1, background: 'var(--pf-accent)' }} />
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--pf-accent)', letterSpacing: 3, textTransform: 'uppercase' }}>
+            Available for opportunities
+          </span>
+        </div>
 
-        {/* Headline */}
+        {/* Main heading */}
         <h1
+          ref={titleRef}
           style={{
-            fontFamily: 'var(--font-sans)',
-            fontWeight: 700,
-            fontSize: 'clamp(72px, 12vw, 140px)',
-            letterSpacing: '-0.03em',
-            lineHeight: 0.95,
+            fontSize: 'clamp(40px, 7vw, 80px)',
+            fontWeight: 800,
+            lineHeight: 1.05,
+            margin: '0 0 8px',
+            letterSpacing: -2,
             color: 'var(--pf-text)',
-            marginBottom: '28px',
           }}
         >
-          <motion.span
-            initial={{ opacity: 0, y: 32 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease }}
-            style={{ display: 'block' }}
-          >
-            Backend
-          </motion.span>
-          <motion.span
-            initial={{ opacity: 0, y: 32 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.15, ease }}
-            style={{ display: 'block' }}
-          >
-            Engineering.
-          </motion.span>
+          Cem Besli
         </h1>
 
-        {/* Sub-headline */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3, ease }}
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '14px',
-            color: 'var(--pf-muted)',
-            letterSpacing: '0.05em',
-            marginBottom: '20px',
-          }}
-        >
-          Linux · Docker · PostgreSQL · APIs · Automation
-        </motion.p>
+        {/* Role line */}
+        <div style={{ marginBottom: 24, height: 48, display: 'flex', alignItems: 'center' }}>
+          <span
+            ref={roleRef}
+            style={{
+              fontSize: 'clamp(22px, 4vw, 38px)',
+              fontWeight: 700,
+              color: 'var(--pf-accent)',
+              letterSpacing: -1,
+            }}
+          />
+        </div>
 
-        {/* Description */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.38, ease }}
+        {/* Subtitle */}
+        <p
+          ref={subtitleRef}
           style={{
-            fontFamily: 'var(--font-sans)',
-            fontSize: '18px',
-            fontWeight: 300,
+            fontSize: 'clamp(15px, 2vw, 18px)',
             color: 'var(--pf-muted)',
-            marginBottom: '40px',
+            lineHeight: 1.7,
+            maxWidth: 560,
+            margin: '0 0 48px',
           }}
         >
-          Software Engineering student moving from Ontario to Cologne, Germany.
-        </motion.p>
+          Software engineering student based in Cologne. I build backend systems —
+          APIs, containerised services, and developer tooling that actually scales.
+        </p>
 
         {/* CTAs */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.46, ease }}
-          style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '48px' }}
-        >
-          <motion.a
-            href="#projects"
-            whileHover={{ opacity: 0.85 }}
-            transition={{ duration: 0.15 }}
+        <div ref={ctaRef} style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center' }}>
+          <button
+            onClick={() => document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' })}
             style={{
               background: 'var(--pf-accent)',
               color: '#fff',
-              fontFamily: 'var(--font-sans)',
-              fontSize: '15px',
-              fontWeight: 500,
-              padding: '12px 24px',
-              borderRadius: '8px',
-              textDecoration: 'none',
-              display: 'inline-block',
+              border: 'none',
+              borderRadius: 10,
+              padding: '13px 28px',
+              fontSize: 14,
+              fontWeight: 600,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              transition: 'opacity 0.2s, transform 0.2s',
             }}
+            onMouseEnter={e => { e.currentTarget.style.opacity = '0.85'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+            onMouseLeave={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'translateY(0)'; }}
           >
-            View my work
-          </motion.a>
-          <motion.a
+            View Projects <ArrowDown size={15} />
+          </button>
+
+          <a
             href="https://github.com/kranklee"
             target="_blank"
             rel="noopener noreferrer"
-            whileHover={{ borderColor: 'var(--pf-text)' }}
-            transition={{ duration: 0.15 }}
             style={{
-              background: 'transparent',
+              background: 'var(--pf-surface)',
               color: 'var(--pf-text)',
-              fontFamily: 'var(--font-sans)',
-              fontSize: '15px',
-              fontWeight: 500,
+              border: '1px solid var(--pf-border-bright)',
+              borderRadius: 10,
               padding: '12px 24px',
-              borderRadius: '8px',
-              border: '1px solid var(--pf-border)',
+              fontSize: 14,
+              fontWeight: 600,
               textDecoration: 'none',
-              display: 'inline-block',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              transition: 'border-color 0.2s, transform 0.2s',
             }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--pf-accent)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--pf-border-bright)'; e.currentTarget.style.transform = 'translateY(0)'; }}
           >
-            GitHub ↗
-          </motion.a>
-        </motion.div>
+            <GitFork size={15} /> GitHub
+          </a>
 
-        {/* Quick-nav pills */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.56, ease }}
-          style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}
-        >
-          {quickLinks.map(({ label, href }) => (
-            <a
-              key={label}
-              href={href}
-              style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: '13px',
-                fontWeight: 400,
-                color: 'var(--pf-muted)',
-                textDecoration: 'none',
-                padding: '5px 14px',
-                borderRadius: '999px',
-                border: '1px solid var(--pf-border)',
-                backdropFilter: 'blur(8px)',
-                transition: 'color 0.2s ease, border-color 0.2s ease',
-              }}
-              onMouseEnter={e => { const el = e.currentTarget; el.style.color = 'var(--pf-text)'; el.style.borderColor = 'var(--pf-muted)' }}
-              onMouseLeave={e => { const el = e.currentTarget; el.style.color = 'var(--pf-muted)'; el.style.borderColor = 'var(--pf-border)' }}
-            >
-              {label}
-            </a>
+          <a
+            href="mailto:cembesli99@gmail.com"
+            style={{
+              color: 'var(--pf-muted)',
+              textDecoration: 'none',
+              fontSize: 14,
+              fontWeight: 500,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              transition: 'color 0.2s',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.color = 'var(--pf-text)')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'var(--pf-muted)')}
+          >
+            <Mail size={14} /> cembesli99@gmail.com
+          </a>
+        </div>
+
+        {/* Quick stats */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 32, marginTop: 64, paddingTop: 40, borderTop: '1px solid var(--pf-border)' }}>
+          {[
+            { num: '3+', label: 'Years of coding' },
+            { num: '10+', label: 'Projects shipped' },
+            { num: 'Cologne', label: 'Based in Germany' },
+          ].map(s => (
+            <div key={s.label}>
+              <div style={{ fontSize: 28, fontWeight: 800, color: 'var(--pf-text)', letterSpacing: -1 }}>{s.num}</div>
+              <div style={{ fontSize: 12, color: 'var(--pf-muted)', marginTop: 2, fontFamily: 'var(--font-mono)' }}>{s.label}</div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
-
-      <motion.div
-        className="absolute hidden md:block"
-        style={{ bottom: '48px', right: '48px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--pf-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}
-        animate={{ y: [0, 6, 0] }}
-        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        Scroll ↓
-      </motion.div>
     </section>
-  )
+  );
 }

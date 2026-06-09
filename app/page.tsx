@@ -1,15 +1,14 @@
-'use client'
+'use client';
 
-import FluidCursor from '@/components/FluidCursor'
-import NavBar from '@/components/NavBar'
-import Hero from '@/components/sections/Hero'
-import Terminal from '@/components/sections/Terminal'
-import Journey from '@/components/sections/Journey'
-import Dashboard from '@/components/sections/Dashboard'
-import Projects from '@/components/sections/Projects'
-import GitHub from '@/components/sections/GitHub'
-import Contact from '@/components/sections/Contact'
-import Footer from '@/components/Footer'
+import FluidCursor from '@/components/FluidCursor';
+import NavBar from '@/components/NavBar';
+import Hero from '@/components/sections/Hero';
+import About from '@/components/sections/About';
+import Projects from '@/components/sections/Projects';
+import Stack from '@/components/sections/Stack';
+import GitHub from '@/components/sections/GitHub';
+import Contact from '@/components/sections/Contact';
+import Footer from '@/components/Footer';
 
 export default function Home() {
   return (
@@ -18,14 +17,13 @@ export default function Home() {
       <NavBar />
       <main style={{ position: 'relative', zIndex: 10 }}>
         <Hero />
-        <Terminal />
-        <Journey />
-        <Dashboard />
+        <About />
         <Projects />
+        <Stack />
         <GitHub />
         <Contact />
       </main>
       <Footer />
     </>
-  )
+  );
 }
