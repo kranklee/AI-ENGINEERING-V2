@@ -1,7 +1,7 @@
 'use client'
 import { useStore } from '@/lib/store'
 import { t } from '@/lib/i18n'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const stats = [
   { value: '3', label: 'Industry roles' },
@@ -9,10 +9,104 @@ const stats = [
   { value: '5', label: 'Languages spoken' },
 ]
 
+const terminalLines = [
+  { prompt: true, text: 'whoami' },
+  { prompt: false, text: 'cem_besli', color: 'var(--tx2)' },
+  { empty: true },
+  { prompt: true, text: 'cat status.txt' },
+  { prompt: false, text: 'open_to_work=true', color: '#22c55e' },
+  { prompt: false, text: 'location=cologne', color: 'var(--tx2)' },
+  { empty: true },
+  { cursor: true },
+]
+
+function TerminalCard() {
+  const [visibleLines, setVisibleLines] = useState(0)
+
+  useEffect(() => {
+    let current = 0
+    const totalLines = terminalLines.length
+
+    const tick = () => {
+      current += 1
+      setVisibleLines(current)
+      if (current < totalLines) {
+        setTimeout(tick, 750)
+      } else {
+        setTimeout(() => {
+          current = 0
+          setVisibleLines(0)
+          setTimeout(tick, 500)
+        }, 4000)
+      }
+    }
+
+    const start = setTimeout(tick, 1000)
+    return () => clearTimeout(start)
+  }, [])
+
+  return (
+    <div style={{
+      width: '100%',
+      marginTop: 20,
+      background: 'rgba(0,0,0,0.85)',
+      border: '1px solid rgba(255,255,255,0.08)',
+      borderRadius: 10,
+      overflow: 'hidden',
+      backdropFilter: 'blur(20px)',
+      WebkitBackdropFilter: 'blur(20px)',
+    }}>
+      {/* Title bar */}
+      <div style={{
+        background: '#1a1a1a',
+        padding: '8px 14px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
+      }}>
+        {['#ff5f57', '#ffbd2e', '#28c840'].map((c, i) => (
+          <div key={i} style={{ width: 8, height: 8, borderRadius: '50%', background: c }} />
+        ))}
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: '#555', marginLeft: 8 }}>
+          cem@cologne ~ bash
+        </span>
+      </div>
+      {/* Body */}
+      <div style={{ padding: '14px 16px', fontFamily: 'var(--font-mono)', fontSize: 12, lineHeight: 1.9 }}>
+        {terminalLines.map((line, i) => {
+          if (i >= visibleLines) return null
+          if (line.empty) return <div key={i} style={{ height: 6 }} />
+          if (line.cursor) return (
+            <div key={i}>
+              <span style={{ color: '#22c55e' }}>$ </span>
+              <span style={{
+                display: 'inline-block',
+                width: 8,
+                height: 14,
+                background: '#22c55e',
+                verticalAlign: 'middle',
+                animation: 'blink 1s step-end infinite',
+              }} />
+            </div>
+          )
+          return (
+            <div key={i}>
+              {line.prompt && <span style={{ color: '#22c55e' }}>$ </span>}
+              <span style={{ color: line.color || '#f0f0f0' }}>{line.text}</span>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 export default function Hero() {
-  const { lang } = useStore()
+  const { lang, theme } = useStore()
   const tx = t[lang].hero
   const dotRef = useRef<HTMLSpanElement>(null)
+  const isColor = theme === 'color'
 
   // Breathing dot animation
   useEffect(() => {
@@ -38,10 +132,41 @@ export default function Hero() {
         zIndex: 1,
         paddingTop: 72,
         fontFamily: 'var(--font-sans)',
+        overflow: 'hidden',
       }}
     >
+      {/* Decorative orb 1 — top right */}
+      <div style={{
+        position: 'absolute',
+        top: '10%',
+        right: '5%',
+        width: 400,
+        height: 400,
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%)',
+        pointerEvents: 'none',
+        zIndex: 0,
+        opacity: isColor ? 1 : 0.4,
+        transition: 'opacity 0.4s',
+      }} />
+
+      {/* Decorative orb 2 — bottom left */}
+      <div style={{
+        position: 'absolute',
+        bottom: '10%',
+        left: '5%',
+        width: 300,
+        height: 300,
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(34,197,94,0.04) 0%, transparent 70%)',
+        pointerEvents: 'none',
+        zIndex: 0,
+        opacity: isColor ? 0.6 : 0.4,
+        transition: 'opacity 0.4s',
+      }} />
+
       {/* Left column */}
-      <div style={{ padding: '56px 32px 48px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderRight: '1px solid var(--br)' }}>
+      <div style={{ padding: '56px 32px 48px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderRight: '1px solid var(--br)', position: 'relative', zIndex: 1 }}>
         <div>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--tx3)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 20 }}>
             {tx.eyebrow}
@@ -124,7 +249,7 @@ export default function Hero() {
       </div>
 
       {/* Right column */}
-      <div style={{ padding: '56px 32px 48px', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ padding: '56px 32px 48px', display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 1 }}>
         {[
           { label: 'Focus', value: tx.focus },
           { label: 'Education', value: tx.education },
@@ -141,7 +266,7 @@ export default function Hero() {
           </div>
         ))}
 
-        <div style={{ marginTop: 'auto', paddingTop: 24, display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ paddingTop: 24, display: 'flex', alignItems: 'center', gap: 8 }}>
           <span
             ref={dotRef}
             style={{ width: 7, height: 7, borderRadius: '50%', background: '#22c55e', display: 'inline-block', flexShrink: 0 }}
@@ -150,13 +275,15 @@ export default function Hero() {
             {tx.available}
           </span>
         </div>
+
+        <TerminalCard />
       </div>
 
       {/* Bottom labels */}
-      <div style={{ position: 'absolute', bottom: 20, left: 32, fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--tx3)', letterSpacing: '0.05em' }}>
+      <div style={{ position: 'absolute', bottom: 20, left: 32, fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--tx3)', letterSpacing: '0.05em', zIndex: 1 }}>
         cembesli.com
       </div>
-      <div style={{ position: 'absolute', bottom: 20, right: 32, fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--tx3)', letterSpacing: '0.06em' }}>
+      <div style={{ position: 'absolute', bottom: 20, right: 32, fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--tx3)', letterSpacing: '0.06em', zIndex: 1 }}>
         scroll ↓
       </div>
 

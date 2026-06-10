@@ -28,6 +28,49 @@ export default function Contact() {
         {tx.heading}
       </h2>
       <p style={{ fontSize: 16, fontWeight: 300, color: 'var(--tx2)', marginBottom: 56 }}>{tx.sub}</p>
+      {/* Cologne map */}
+      <div style={{
+        maxWidth: 560,
+        marginBottom: 40,
+        borderRadius: 12,
+        overflow: 'hidden',
+        border: '1px solid var(--br)',
+        position: 'relative',
+      }}>
+        <iframe
+          src="https://www.openstreetmap.org/export/embed.html?bbox=6.8,50.85,7.1,51.05&layer=mapnik&marker=50.938361,6.959974"
+          width="100%"
+          height="200"
+          style={{ border: 'none', display: 'block', opacity: 0.8 }}
+          title="Cologne, Germany"
+        />
+        <div style={{
+          position: 'absolute',
+          top: 12,
+          left: 12,
+          background: 'var(--bg)',
+          border: '1px solid var(--br)',
+          borderRadius: 6,
+          padding: '6px 12px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 6,
+          fontFamily: 'var(--font-mono)',
+          fontSize: 11,
+          color: 'var(--tx2)',
+        }}>
+          <span style={{
+            width: 6,
+            height: 6,
+            borderRadius: '50%',
+            background: '#22c55e',
+            flexShrink: 0,
+            animation: 'blink 2s ease-in-out infinite',
+          }} />
+          Based in Cologne, Germany
+        </div>
+      </div>
+
       <div style={{ maxWidth: 560 }}>
         {links.map((link, i) => (
           <a

@@ -22,21 +22,69 @@ export default function About() {
           ))}
         </div>
 
-        {/* Info card */}
-        <div style={{ background: 'var(--bg2)', border: '1px solid var(--br)', borderRadius: 12, padding: 32, height: 'fit-content', position: 'sticky', top: 100 }}>
-          {[
-            { label: 'Focus', value: tx.infoFocus },
-            { label: 'Education', value: tx.infoEdu },
-            { label: 'Location', value: tx.infoLoc },
-            { label: 'Status', value: tx.infoStatus },
-          ].map((row, i, arr) => (
-            <div key={i} style={{ padding: '14px 0', borderBottom: i < arr.length - 1 ? '1px solid var(--br)' : 'none' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--tx3)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>
-                {row.label}
-              </div>
-              <div style={{ fontSize: 13, color: 'var(--tx2)', lineHeight: 1.5 }}>{row.value}</div>
+        {/* Right column: photo + info */}
+        <div style={{ position: 'sticky', top: 100, height: 'fit-content' }}>
+          {/* Photo card */}
+          <div style={{
+            width: '100%',
+            marginBottom: 16,
+            borderRadius: 12,
+            overflow: 'hidden',
+            border: '1px solid var(--br)',
+            position: 'relative',
+          }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/cem-photo.jpg"
+              alt="Cem Besli"
+              style={{
+                width: '100%',
+                height: '300px',
+                objectFit: 'cover',
+                objectPosition: 'center top',
+                display: 'block',
+                filter: 'grayscale(15%)',
+                transition: 'filter 0.4s ease',
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLImageElement).style.filter = 'grayscale(0%)' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLImageElement).style.filter = 'grayscale(15%)' }}
+            />
+            {/* Overlay badge */}
+            <div style={{
+              position: 'absolute',
+              bottom: 12,
+              left: 12,
+              background: 'rgba(0,0,0,0.65)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: 6,
+              padding: '6px 14px',
+              fontFamily: 'var(--font-mono)',
+              fontSize: 11,
+              color: '#f0f0f0',
+              letterSpacing: '0.04em',
+            }}>
+              Cem Besli · Cologne, Germany
             </div>
-          ))}
+          </div>
+
+          {/* Info card */}
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--br)', borderRadius: 12, padding: 32 }}>
+            {[
+              { label: 'Focus', value: tx.infoFocus },
+              { label: 'Education', value: tx.infoEdu },
+              { label: 'Location', value: tx.infoLoc },
+              { label: 'Status', value: tx.infoStatus },
+            ].map((row, i, arr) => (
+              <div key={i} style={{ padding: '14px 0', borderBottom: i < arr.length - 1 ? '1px solid var(--br)' : 'none' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--tx3)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>
+                  {row.label}
+                </div>
+                <div style={{ fontSize: 13, color: 'var(--tx2)', lineHeight: 1.5 }}>{row.value}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
