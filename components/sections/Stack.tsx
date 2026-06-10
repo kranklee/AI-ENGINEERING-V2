@@ -2,13 +2,21 @@
 import { useStore } from '@/lib/store'
 import { t } from '@/lib/i18n'
 
-const stackItems = [
-  { icon: '🐧', name: 'Linux', desc: 'Shell scripting, process management, daily driver.', level: 90 },
-  { icon: '🐳', name: 'Docker', desc: 'Containerization, compose, multi-service setups.', level: 80 },
-  { icon: '🐘', name: 'PostgreSQL', desc: 'Schema design, indexing, query optimization.', level: 75 },
-  { icon: '⚡', name: 'FastAPI', desc: 'Async Python APIs, dependency injection, OpenAPI.', level: 70 },
-  { icon: '🤖', name: 'LLM APIs', desc: 'Anthropic API, RAG pipelines, AI workflows.', level: 65 },
-  { icon: '🇩🇪', name: 'German', desc: 'Working toward B2. Daily practice.', level: 40 },
+const stackGroups = [
+  { category: 'Languages', items: ['Python', 'Java', 'C#', 'JavaScript', 'TypeScript'] },
+  { category: 'Backend', items: ['FastAPI', '.NET Core', 'Flask', 'Node.js', 'REST APIs'] },
+  { category: 'Frontend', items: ['React', 'Next.js', 'HTML5', 'CSS3', 'Tailwind'] },
+  { category: 'Databases', items: ['PostgreSQL', 'SQL Server', 'MongoDB', 'MySQL', 'Supabase'] },
+  { category: 'Infrastructure', items: ['Docker', 'Linux', 'Git', 'Azure', 'CI/CD'] },
+  { category: 'AI / ML', items: ['TensorFlow', 'scikit-learn', 'LLM APIs', 'RAG Systems', 'Power BI'] },
+]
+
+const spokenLanguages = [
+  { lang: 'English', level: 'Native' },
+  { lang: 'Turkish', level: 'Native' },
+  { lang: 'German', level: 'Learning · B1' },
+  { lang: 'French', level: 'Conversational' },
+  { lang: 'Dutch', level: 'Basic' },
 ]
 
 export default function Stack() {
@@ -20,28 +28,72 @@ export default function Stack() {
       <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--tx3)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 16 }}>
         {tx.label}
       </div>
-      <h2 style={{ fontSize: 'clamp(28px,4vw,48px)', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--tx)', marginBottom: 56, lineHeight: 1.1 }}>
+      <h2 style={{ fontSize: 'clamp(28px,4vw,48px)', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--tx)', marginBottom: 48, lineHeight: 1.1 }}>
         {tx.heading}
       </h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16 }}>
-        {stackItems.map((item, i) => (
+
+      {/* Category grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 2 }}>
+        {stackGroups.map((group, i) => (
           <div
             key={i}
-            style={{ background: 'var(--bg2)', border: '1px solid var(--br)', borderRadius: 12, padding: 24, transition: 'all 0.2s', cursor: 'default' }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--br2)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--br)'; e.currentTarget.style.transform = 'translateY(0)' }}
+            style={{
+              background: 'var(--bg2)',
+              border: '1px solid var(--br)',
+              borderRadius: 12,
+              padding: '20px 22px',
+              margin: 6,
+            }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
-              <div style={{ fontSize: 28 }}>{item.icon}</div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--tx3)' }}>{item.level}%</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--tx3)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 14 }}>
+              {group.category}
             </div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--tx)', marginBottom: 8 }}>{item.name}</div>
-            <div style={{ fontSize: 13, color: 'var(--tx2)', lineHeight: 1.6, fontWeight: 300, marginBottom: 16 }}>{item.desc}</div>
-            <div style={{ height: 3, background: 'var(--bg3)', borderRadius: 2 }}>
-              <div style={{ height: '100%', width: `${item.level}%`, background: 'var(--ac)', borderRadius: 2, transition: 'width 0.8s ease' }} />
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
+              {group.items.map((item, j) => (
+                <span
+                  key={j}
+                  style={{
+                    fontSize: 12,
+                    fontFamily: 'var(--font-mono)',
+                    color: 'var(--tag-tx)',
+                    background: 'var(--tag-bg)',
+                    border: '1px solid var(--tag-br)',
+                    borderRadius: 5,
+                    padding: '4px 10px',
+                  }}
+                >
+                  {item}
+                </span>
+              ))}
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Spoken languages */}
+      <div style={{ marginTop: 48, borderTop: '1px solid var(--br)', paddingTop: 36 }}>
+        <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--tx3)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 20 }}>
+          Spoken Languages
+        </div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+          {spokenLanguages.map((sl, i) => (
+            <div
+              key={i}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                background: 'var(--bg2)',
+                border: '1px solid var(--br)',
+                borderRadius: 8,
+                padding: '10px 16px',
+              }}
+            >
+              <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--tx)' }}>{sl.lang}</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--tx3)' }}>{sl.level}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   )

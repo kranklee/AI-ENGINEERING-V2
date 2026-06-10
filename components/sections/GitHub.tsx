@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { Star, ExternalLink, Users, BookOpen } from 'lucide-react'
+import { Star, ExternalLink, BookOpen } from 'lucide-react'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -13,17 +13,12 @@ interface Repo {
   stars: number
   updatedAt: string
   url: string
-  topics: string[]
 }
 
 interface GitHubData {
   repos: Repo[]
   publicRepos: number
-  followers: number
-  following: number
   username: string
-  avatarUrl: string
-  bio: string | null
   error?: string
 }
 
@@ -31,12 +26,19 @@ const langColor: Record<string, string> = {
   Python: '#3572A5',
   TypeScript: '#2b7489',
   JavaScript: '#f1e05a',
+  'C#': '#178600',
+  Java: '#b07219',
   Shell: '#89e051',
   Dockerfile: '#384d54',
   HTML: '#e34c26',
   CSS: '#563d7c',
   Go: '#00ADD8',
   Rust: '#dea584',
+}
+
+function truncate(str: string | null, max: number): string {
+  if (!str) return ''
+  return str.length > max ? str.slice(0, max - 1) + '…' : str
 }
 
 export default function GitHub() {
@@ -52,6 +54,7 @@ export default function GitHub() {
   }, [])
 
   useEffect(() => {
+    if (loading) return
     const ctx = gsap.context(() => {
       gsap.fromTo(
         sectionRef.current?.querySelectorAll('.gh-card') ?? [],
@@ -61,7 +64,7 @@ export default function GitHub() {
       )
     })
     return () => ctx.revert()
-  }, [data])
+  }, [loading])
 
   return (
     <section
@@ -69,112 +72,108 @@ export default function GitHub() {
       ref={sectionRef}
       style={{ padding: 'clamp(60px,10vw,120px) 32px', maxWidth: 1100, margin: '0 auto', fontFamily: 'var(--font-sans)' }}
     >
-      {/* Label */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 56 }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--tx3)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-          GitHub
-        </span>
-        <div style={{ flex: 1, height: 1, background: 'var(--br)' }} />
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 40, alignItems: 'start' }}>
-        {/* Stats */}
-        <div>
-          <h2 style={{ fontSize: 'clamp(26px,3.5vw,40px)', fontWeight: 700, letterSpacing: '-0.03em', margin: '0 0 24px', color: 'var(--tx)', lineHeight: 1.1 }}>
-            Open source.
-          </h2>
-
-          {loading ? (
-            <div style={{ color: 'var(--tx2)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>Loading...</div>
-          ) : data?.error ? (
-            <div style={{ color: 'var(--tx2)', fontSize: 14 }}>Could not load GitHub data.</div>
-          ) : data && (
-            <>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 32 }}>
-                {[
-                  { icon: <BookOpen size={16} />, label: 'Public Repos', value: data.publicRepos },
-                  { icon: <Users size={16} />, label: 'Followers', value: data.followers },
-                ].map(stat => (
-                  <div
-                    key={stat.label}
-                    className="gh-card"
-                    style={{ background: 'var(--bg2)', border: '1px solid var(--br)', borderRadius: 12, padding: 20 }}
-                  >
-                    <div style={{ color: 'var(--ac)', marginBottom: 8 }}>{stat.icon}</div>
-                    <div style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--tx)' }}>{stat.value}</div>
-                    <div style={{ fontSize: 12, color: 'var(--tx3)', fontFamily: 'var(--font-mono)', marginTop: 4 }}>{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-
-              <a
-                href={`https://github.com/${data.username}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 8,
-                  background: 'var(--bg2)', border: '1px solid var(--br)',
-                  borderRadius: 8, padding: '10px 20px',
-                  color: 'var(--tx)', textDecoration: 'none', fontSize: 13, fontWeight: 500,
-                  transition: 'border-color 0.2s',
-                }}
-                onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--br2)')}
-                onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--br)')}
-              >
-                <ExternalLink size={13} />
-                github.com/{data.username}
-              </a>
-            </>
+      {/* Header row */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 48, flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--tx3)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+            GitHub
+          </div>
+          {!loading && data && !data.error && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--tx3)', fontSize: 12, fontFamily: 'var(--font-mono)' }}>
+              <BookOpen size={12} />
+              {data.publicRepos} public repos
+            </div>
           )}
         </div>
+        {!loading && data && !data.error && (
+          <a
+            href={`https://github.com/${data.username}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              background: 'var(--bg2)', border: '1px solid var(--br)',
+              borderRadius: 7, padding: '8px 16px',
+              color: 'var(--tx2)', textDecoration: 'none', fontSize: 12,
+              fontFamily: 'var(--font-mono)', transition: 'border-color 0.2s, color 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--br2)'; e.currentTarget.style.color = 'var(--tx)' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--br)'; e.currentTarget.style.color = 'var(--tx2)' }}
+          >
+            <ExternalLink size={12} />
+            github.com/{data.username}
+          </a>
+        )}
+      </div>
 
-        {/* Repo list */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          {loading ? (
-            Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="gh-card" style={{ background: 'var(--bg2)', borderRadius: 12, height: 110, border: '1px solid var(--br)' }} />
+      <h2 style={{ fontSize: 'clamp(26px,3.5vw,40px)', fontWeight: 700, letterSpacing: '-0.03em', margin: '0 0 36px', color: 'var(--tx)', lineHeight: 1.1 }}>
+        Open source.
+      </h2>
+
+      {/* Error state */}
+      {!loading && (!data || data.error) && (
+        <p style={{ color: 'var(--tx2)', fontSize: 14 }}>Could not load GitHub data.</p>
+      )}
+
+      {/* 2-column repo grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 }}>
+        {loading
+          ? Array.from({ length: 4 }).map((_, i) => (
+              <div
+                key={i}
+                className="gh-card"
+                style={{
+                  background: 'var(--bg2)',
+                  border: '1px solid var(--br)',
+                  borderRadius: 12,
+                  height: 120,
+                  animation: 'gh-pulse 1.6s ease-in-out infinite',
+                }}
+              />
             ))
-          ) : data?.repos?.map(repo => (
-            <a
-              key={repo.name}
-              href={repo.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="gh-card"
-              style={{
-                background: 'var(--bg2)', border: '1px solid var(--br)',
-                borderRadius: 12, padding: 20, textDecoration: 'none', display: 'block',
-                transition: 'border-color 0.2s, transform 0.2s',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--br2)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--br)'; e.currentTarget.style.transform = 'translateY(0)' }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
-                <span style={{ fontWeight: 600, fontSize: 14, color: 'var(--tx)', fontFamily: 'var(--font-mono)' }}>{repo.name}</span>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--tx3)', fontSize: 12 }}>
-                  <Star size={11} />{repo.stars}
+          : data?.repos?.map(repo => (
+              <a
+                key={repo.name}
+                href={repo.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="gh-card"
+                style={{
+                  background: 'var(--bg2)', border: '1px solid var(--br)',
+                  borderRadius: 12, padding: 20, textDecoration: 'none', display: 'block',
+                  transition: 'border-color 0.2s, transform 0.2s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--br2)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--br)'; e.currentTarget.style.transform = 'translateY(0)' }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
+                  <span style={{ fontWeight: 600, fontSize: 14, color: 'var(--tx)', fontFamily: 'var(--font-mono)' }}>{repo.name}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--tx3)', fontSize: 12, flexShrink: 0 }}>
+                    <Star size={11} />{repo.stars}
+                  </div>
                 </div>
-              </div>
-              {repo.description && (
-                <p style={{ color: 'var(--tx2)', fontSize: 13, margin: '0 0 12px', lineHeight: 1.5, fontWeight: 300 }}>{repo.description}</p>
-              )}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                {repo.description && (
+                  <p style={{ color: 'var(--tx2)', fontSize: 13, margin: '0 0 12px', lineHeight: 1.5, fontWeight: 300 }}>
+                    {truncate(repo.description, 80)}
+                  </p>
+                )}
                 {repo.language && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, color: 'var(--tx2)' }}>
-                    <div style={{ width: 9, height: 9, borderRadius: '50%', background: langColor[repo.language] ?? 'var(--tx3)' }} />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--tx2)' }}>
+                    <div style={{ width: 9, height: 9, borderRadius: '50%', background: langColor[repo.language] ?? 'var(--tx3)', flexShrink: 0 }} />
                     {repo.language}
                   </div>
                 )}
-                {repo.topics.map(topic => (
-                  <span key={topic} style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--tx2)', background: 'var(--tag-bg)', border: '1px solid var(--tag-br)', borderRadius: 4, padding: '2px 7px' }}>
-                    {topic}
-                  </span>
-                ))}
-              </div>
-            </a>
-          ))}
-        </div>
+              </a>
+            ))
+        }
       </div>
+
+      <style>{`
+        @keyframes gh-pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.4; }
+        }
+      `}</style>
     </section>
   )
 }

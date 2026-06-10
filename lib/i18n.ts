@@ -10,7 +10,7 @@ export const languages: { code: Lang; label: string }[] = [
 
 export const t: Record<Lang, {
   nav: { about: string; stack: string; projects: string; contact: string }
-  hero: { eyebrow: string; h1: string; h1acc: string; sub: string; cta: string; github: string; available: string; focus: string; education: string; location: string }
+  hero: { eyebrow: string; h1: string; h1acc: string; sub: string; cta: string; github: string; resume: string; available: string; focus: string; education: string; location: string }
   about: { label: string; heading: string; p1: string; p2: string; p3: string; infoFocus: string; infoEdu: string; infoLoc: string; infoStatus: string }
   stack: { label: string; heading: string }
   projects: { label: string; heading: string; problem: string; solution: string; stack: string; outcome: string; view: string }
@@ -26,6 +26,7 @@ export const t: Record<Lang, {
       sub: 'Software engineering student. Moving from Ontario to Cologne this year. I work with Linux, Docker, PostgreSQL, FastAPI — mostly backend, some AI.',
       cta: 'View Projects',
       github: 'GitHub ↗',
+      resume: 'Resume ↓',
       available: 'Open to work in Germany',
       focus: 'Backend · Linux · Docker · PostgreSQL',
       education: 'Software Eng. Technology · Centennial College, 2027',
@@ -56,6 +57,7 @@ export const t: Record<Lang, {
       sub: 'Software-Engineering-Student. Ziehe dieses Jahr von Ontario nach Köln. Ich arbeite mit Linux, Docker, PostgreSQL und FastAPI — hauptsächlich Backend, etwas KI.',
       cta: 'Projekte ansehen',
       github: 'GitHub ↗',
+      resume: 'Lebenslauf ↓',
       available: 'Offen für Stellen in Deutschland',
       focus: 'Backend · Linux · Docker · PostgreSQL',
       education: 'Software Eng. Technology · Centennial College, 2027',
@@ -86,6 +88,7 @@ export const t: Record<Lang, {
       sub: 'Étudiant en génie logiciel. Je déménage d\'Ontario à Cologne cette année. Je travaille avec Linux, Docker, PostgreSQL, FastAPI — surtout backend, un peu d\'IA.',
       cta: 'Voir les projets',
       github: 'GitHub ↗',
+      resume: 'CV ↓',
       available: 'Ouvert aux postes en Allemagne',
       focus: 'Backend · Linux · Docker · PostgreSQL',
       education: 'Génie logiciel · Centennial College, 2027',
@@ -116,6 +119,7 @@ export const t: Record<Lang, {
       sub: 'Software engineering student. Verhuis dit jaar van Ontario naar Keulen. Ik werk met Linux, Docker, PostgreSQL, FastAPI — voornamelijk backend, wat AI.',
       cta: 'Projecten bekijken',
       github: 'GitHub ↗',
+      resume: 'CV ↓',
       available: 'Open voor werk in Duitsland',
       focus: 'Backend · Linux · Docker · PostgreSQL',
       education: 'Software Eng. Technology · Centennial College, 2027',
@@ -146,6 +150,7 @@ export const t: Record<Lang, {
       sub: 'Estudiante de ingeniería de software. Me mudo de Ontario a Colonia este año. Trabajo con Linux, Docker, PostgreSQL, FastAPI — principalmente backend, algo de IA.',
       cta: 'Ver proyectos',
       github: 'GitHub ↗',
+      resume: 'CV ↓',
       available: 'Abierto a trabajo en Alemania',
       focus: 'Backend · Linux · Docker · PostgreSQL',
       education: 'Ing. Software · Centennial College, 2027',
