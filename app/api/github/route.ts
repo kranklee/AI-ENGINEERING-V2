@@ -22,7 +22,7 @@ export async function GET() {
     const user = await userRes.json();
 
     const repoData = repos
-      .filter((r: { fork: boolean }) => !r.fork)
+      .filter((r: { fork: boolean; name: string }) => !r.fork && r.name !== 'COMP254_cembesli_Labs')
       .sort((a: { updated_at: string }, b: { updated_at: string }) =>
         new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
       )

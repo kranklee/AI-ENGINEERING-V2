@@ -107,7 +107,7 @@ export default function GitHub() {
       </div>
 
       <h2 style={{ fontSize: 'clamp(26px,3.5vw,40px)', fontWeight: 700, letterSpacing: '-0.03em', margin: '0 0 36px', color: 'var(--tx)', lineHeight: 1.1 }}>
-        Open source.
+        What I&apos;m building.
       </h2>
 
       {/* Error state */}

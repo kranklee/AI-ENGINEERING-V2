@@ -15,8 +15,6 @@ const spokenLanguages = [
   { lang: 'English', level: 'Native' },
   { lang: 'Turkish', level: 'Native' },
   { lang: 'German', level: 'Learning · B1' },
-  { lang: 'French', level: 'Conversational' },
-  { lang: 'Dutch', level: 'Basic' },
 ]
 
 export default function Stack() {
