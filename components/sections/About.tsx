@@ -27,6 +27,7 @@ export default function About() {
           {/* Photo card */}
           <div style={{
             width: '100%',
+            height: '420px',
             marginBottom: 16,
             borderRadius: 12,
             overflow: 'hidden',
@@ -35,13 +36,13 @@ export default function About() {
           }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/cem-photo.jpg"
+              src="/cem-photo1.png"
               alt="Cem Besli"
               style={{
                 width: '100%',
-                height: '300px',
+                height: '420px',
                 objectFit: 'cover',
-                objectPosition: 'center top',
+                objectPosition: '50% 30%',
                 display: 'block',
                 filter: 'grayscale(15%)',
                 transition: 'filter 0.4s ease',

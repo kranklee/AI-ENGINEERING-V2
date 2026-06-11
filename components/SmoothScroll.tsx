@@ -7,6 +7,8 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      // prevent Lenis from hijacking wheel events inside the chat panel
+      prevent: (node: Element) => node.closest('[data-chat-panel]') !== null,
     });
 
     function raf(time: number) {

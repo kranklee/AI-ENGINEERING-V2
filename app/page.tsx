@@ -6,6 +6,7 @@ import Stack from '@/components/sections/Stack'
 import GitHub from '@/components/sections/GitHub'
 import Contact from '@/components/sections/Contact'
 import Footer from '@/components/Footer'
+import ChatWidget from '@/components/ChatWidget'
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
+      <ChatWidget />
     </>
   )
 }
